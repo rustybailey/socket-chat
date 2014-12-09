@@ -15,11 +15,30 @@ io.on('connection', function(socket) {
 
   socket.on('disconnect', function() {
     console.log('user disconnected');
+
+    var data = {
+      name: socket.nickname,
+      msg: 'left the room.'
+    };
+
+    if (socket.nickname) {
+      io.emit('chat message', data);
+      console.log('message: ' + data.msg);
+    }
   });
 
-  socket.on('chat message', function(data) {
-    console.log('message: ' + data.msg);
+  socket.on('chat message', function(msg) {
+    console.log('message: ' + msg);
+
+    var data = {
+      name: socket.nickname,
+      msg: msg
+    };
 
     io.emit('chat message', data);
+  });
+
+  socket.on('add user', function(user) {
+    socket.nickname = user;
   });
 });

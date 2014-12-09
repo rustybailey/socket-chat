@@ -2,12 +2,7 @@ var socket = io();
 var nickname;
 
 $('form').submit(function() {
-  var data = {
-    name: nickname,
-    msg: $('#m').val()
-  };
-
-  socket.emit('chat message', data);
+  socket.emit('chat message', $('#m').val());
   $('#m').val('');
   return false;
 });
@@ -25,11 +20,9 @@ $('.choose-name').dialog({
       click: function() {
         nickname = $('.nickname').val();
 
-        var data = {
-          name: nickname,
-          msg: 'joined the room.'
-        };
-        socket.emit('chat message', data);
+        socket.emit('add user', nickname);
+        socket.emit('chat message', 'joined the room.');
+
         $(this).dialog("close");
       }
     }
