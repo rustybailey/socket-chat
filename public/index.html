@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.2/themes/flick/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
   </head>
   <body>
@@ -10,8 +11,13 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
+    <div class="choose-name" style="display: none;">
+      <input type="text" class="nickname" />
+    </div>
+
     <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript" src="js/messaging.js"></script>
   </body>
 </html>
