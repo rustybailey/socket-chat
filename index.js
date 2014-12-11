@@ -32,7 +32,8 @@ io.on('connection', function(socket) {
 
     var data = {
       name: socket.nickname,
-      msg: msg
+      msg: msg,
+      time: new Date()
     };
 
     io.emit('chat message', data);
