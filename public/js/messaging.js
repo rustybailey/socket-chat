@@ -9,13 +9,21 @@ var messageHtmlStr =
 var messageTemplate = _.template(messageHtmlStr);
 
 $('form').submit(function() {
-  socket.emit('chat message', ': ' + $('#m').val());
+  var message = $('#m').val().trim();
+  if (!message) {
+    return false;
+  }
+  socket.emit('chat message', ': ' + message);
   $('#m').val('');
   return false;
 });
 
 socket.on('chat message', function(data) {
   $('#messages').append(messageTemplate(data));
+});
+
+socket.on('user count', function(num) {
+  $('.user-count').text(num);
 });
 
 

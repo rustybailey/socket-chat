@@ -8,7 +8,8 @@ app.use(express.static(__dirname + '/public'));
 var server = http.createServer(app);
 server.listen(port);
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server),
+  numUsers = 0;
 
 io.on('connection', function(socket) {
   console.log('a user connected');
@@ -24,6 +25,8 @@ io.on('connection', function(socket) {
     if (socket.nickname) {
       io.emit('chat message', data);
       console.log('message: ' + data.msg);
+      numUsers--;
+      io.emit('user count', numUsers);
     }
   });
 
@@ -41,5 +44,8 @@ io.on('connection', function(socket) {
 
   socket.on('add user', function(user) {
     socket.nickname = user;
+
+    numUsers++;
+    io.emit('user count', numUsers);
   });
 });
