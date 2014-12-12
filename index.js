@@ -53,9 +53,9 @@ io.on('connection', function(socket) {
     };
 
     if (length) {
-      io.emit('show typing', data);
+      socket.broadcast.emit('show typing', data);
     } else {
-      io.emit('hide typing', data);
+      socket.broadcast.emit('hide typing', data);
     }
   });
 });
