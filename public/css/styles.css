@@ -26,6 +26,7 @@ body {
     float: right;
     padding: 4px;
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .user-count {
@@ -35,6 +36,50 @@ body {
     padding: 6px 8px;
     width: 25px;
     height: 25px;
+}
+
+.user-list {
+    display: none;
+    position: absolute;
+    top: 11%;
+    right: 2.5%;
+    background: rgb(116, 116, 116);
+    padding: 10px;
+    z-index: 1000;
+    color: whitesmoke;
+}
+
+.user-list ul {
+    list-style: none;
+}
+
+.user-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid lightgray;
+    min-width: 100px;
+}
+
+.user-list li:first-child {
+    padding-top: 0;
+}
+
+.user-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.user-list:after {
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: rgb(116, 116, 116);
+    border-width: 15px;
+    margin-left: -15px;
 }
 
 .typing-container {
@@ -94,6 +139,10 @@ form button:hover {
 #messages li {
     padding: 5px 10px;
     border-top: 1px solid whitesmoke;
+}
+
+#messages li:first-child {
+    border-top: none;
 }
 
 #messages li:hover .message-time {

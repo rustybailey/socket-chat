@@ -26,6 +26,14 @@ socket.on('user count', function(num) {
   $('.user-count').text(num);
 });
 
+socket.on('user list', function(data) {
+  $('.user-list ul').empty();
+
+  for (var i in data) {
+    $('.user-list ul').append('<li>' + i + '</li>');
+  }
+});
+
 socket.on('show typing', function(data) {
   var typingSpan = $('.typing.' + data.id);
 
@@ -44,6 +52,10 @@ socket.on('hide typing', function(data) {
 
 $(document).on('keyup', '#m', function(e) {
   socket.emit('typing', $('#m').val().trim().length);
+});
+
+$(document).on('mouseenter mouseleave', '.user-count-container', function() {
+  $('.user-list').toggle();
 });
 
 

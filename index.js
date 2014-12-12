@@ -9,6 +9,7 @@ var server = http.createServer(app);
 server.listen(port);
 
 var io = require('socket.io').listen(server),
+  userNames = {},
   numUsers = 0;
 
 io.on('connection', function(socket) {
@@ -31,18 +32,23 @@ io.on('connection', function(socket) {
 
     if (socket.nickname) {
       createMessage(' left the room.');
+      delete userNames[socket.nickname];
       numUsers--;
       io.emit('user count', numUsers);
+      io.emit('user list', userNames);
     }
   });
 
   socket.on('create chat message', createMessage);
 
   socket.on('add user', function(user) {
+    // TODO: Check if that username exists, if so, add a random string of 4 numbers
     socket.nickname = user;
-
+    userNames[user] = user;
     numUsers++;
+
     io.emit('user count', numUsers);
+    io.emit('user list', userNames);
   });
 
   socket.on('typing', function(length) {
