@@ -13,17 +13,37 @@ $('form').submit(function() {
   if (!message) {
     return false;
   }
-  socket.emit('chat message', ': ' + message);
+  socket.emit('create chat message', ': ' + message);
   $('#m').val('');
   return false;
 });
 
-socket.on('chat message', function(data) {
+socket.on('show chat message', function(data) {
   $('#messages').append(messageTemplate(data));
 });
 
 socket.on('user count', function(num) {
   $('.user-count').text(num);
+});
+
+socket.on('show typing', function(data) {
+  var typingSpan = $('.typing.' + data.id);
+
+  if (!typingSpan.length) {
+    $('.typing-container').append('<div class="typing ' + data.id + '">' + data.name + data.msg + '</div>');
+  }
+});
+
+socket.on('hide typing', function(data) {
+  var typingSpan = $('.typing.' + data.id);
+
+  if (typingSpan.length) {
+    typingSpan.remove();
+  }
+});
+
+$(document).on('keyup', '#m', function(e) {
+  socket.emit('typing', $('#m').val().trim().length);
 });
 
 
@@ -34,7 +54,7 @@ $('.choose-name').dialog({
   move: false,
   modal: true,
   open: function() {
-    $('.choose-name').on('keyup input', '.nickname', function(e) {
+    $('.choose-name').on('keyup', '.nickname', function(e) {
       if (e.which === 13) {
         $('.ui-dialog-buttonset .ui-button').click();
       }
@@ -52,9 +72,10 @@ $('.choose-name').dialog({
         }
 
         socket.emit('add user', nickname);
-        socket.emit('chat message', ' joined the room.');
+        socket.emit('create chat message', ' joined the room.');
 
         $(this).dialog("close");
+        $('#m').focus();
       }
     }
   ]

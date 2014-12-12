@@ -12,25 +12,7 @@ var io = require('socket.io').listen(server),
   numUsers = 0;
 
 io.on('connection', function(socket) {
-  console.log('a user connected');
-
-  socket.on('disconnect', function() {
-    console.log('user disconnected');
-
-    var data = {
-      name: socket.nickname,
-      msg: 'left the room.'
-    };
-
-    if (socket.nickname) {
-      io.emit('chat message', data);
-      console.log('message: ' + data.msg);
-      numUsers--;
-      io.emit('user count', numUsers);
-    }
-  });
-
-  socket.on('chat message', function(msg) {
+  var createMessage = function(msg) {
     console.log('message: ' + msg);
 
     var data = {
@@ -39,13 +21,41 @@ io.on('connection', function(socket) {
       time: new Date()
     };
 
-    io.emit('chat message', data);
+    io.emit('show chat message', data);
+  };
+
+  console.log('a user connected');
+
+  socket.on('disconnect', function() {
+    console.log('user disconnected');
+
+    if (socket.nickname) {
+      createMessage(' left the room.');
+      numUsers--;
+      io.emit('user count', numUsers);
+    }
   });
+
+  socket.on('create chat message', createMessage);
 
   socket.on('add user', function(user) {
     socket.nickname = user;
 
     numUsers++;
     io.emit('user count', numUsers);
+  });
+
+  socket.on('typing', function(length) {
+    var data = {
+      id: socket.id,
+      name: socket.nickname,
+      msg: ' is typing...'
+    };
+
+    if (length) {
+      io.emit('show typing', data);
+    } else {
+      io.emit('hide typing', data);
+    }
   });
 });
